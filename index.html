@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RotoFo Importer</title>
+  <title>RotoFo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -284,11 +284,9 @@
 <body>
   <div class="container-wrap">
     <header>
-        <h1 class="app-title">RotoFo Importer</h1>
-        <p class="app-subtitle">Enough clicking.</p>
+        <h1 class="app-title">RotoFo</h1>
     </header>
 
-    <!-- 1. Connection & Scope Card -->
     <div class="card">
       <h2>1. Fourth Connection</h2>
       <div class="card-content">
@@ -296,7 +294,7 @@
             <div class="list-item">
                 <label for="token" class="list-label">API Bearer Token</label>
                 <div class="list-input-container">
-                    <input id="token" class="list-input" type="password" placeholder="Paste secure token" autocomplete="off" />
+                    <input id="token" class="list-input" type="text" placeholder="Paste secure token" autocomplete="off" />
                 </div>
             </div>
             <div class="list-item">
@@ -315,7 +313,6 @@
       </div>
     </div>
 
-    <!-- 2. Data & Execution Card -->
     <div class="card">
       <h2>2. Data & Dates</h2>
       <div class="card-content">
@@ -348,11 +345,9 @@
       </div>
     </div>
 
-    <!-- 3. Results & Action Card -->
     <div class="card">
       <h2>3. Analysis Summary & Action</h2>
       <div class="card-content">
-        <!-- Metrics Panel -->
         <div class="metrics-panel">
             <div class="metric-box" data-status="info">
               <strong id="statCsv">0</strong>
@@ -376,7 +371,6 @@
             </div>
         </div>
 
-        <!-- Progress and Final Action -->
         <div id="progressWrap" class="progress-container">
           <div class="progress-bar-wrap">
             <div id="progressBar" class="progress-bar"></div>
@@ -394,7 +388,6 @@
       </div>
     </div>
 
-    <!-- 4. Diagnostics & Live Log Card -->
     <div class="card">
         <h2>4. Live Activity Log</h2>
         <div class="card-content">
@@ -415,9 +408,8 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="text-xs text-slate-500 dark:text-slate-500 pt-2 pb-8">
-        <p>RotoFo Importer v0.5 • © 2025 elroydr</p>
+        <p>RotoFo Importer v0.6 • © 2025 elroydr</p>
     </footer>
 
   </div>
@@ -605,30 +597,28 @@
         var shiftDurationMinutes = (endDate.getTime() - startDate.getTime()) / (1000 * 60);
 
         if (breakMin >= shiftDurationMinutes) {
-             // Break is longer than or equal to the shift itself
              log('Warning: Break of '+breakMin+' min is >= shift duration ('+shiftDurationMinutes+' min). Skipping break for PN '+pn, 'warn');
              breakMin = 0;
         } else {
-             // Calculate the start time of the break, centered on the shift's midpoint.
              var breakStartOffsetMinutes = Math.floor(shiftDurationMinutes / 2) - Math.floor(breakMin / 2);
-
              var breakDate = new Date(startDate.getTime());
              breakDate.setMinutes(breakDate.getMinutes() + breakStartOffsetMinutes); 
              
-             // Final safety check: ensure break ends before shift ends
              var breakEndMs = breakDate.getTime() + (breakMin * 60 * 1000);
              if (breakEndMs <= endDate.getTime()) {
-                 break1Start = toLocalIsoString(breakDate); // Use the fixed local time converter
+                 break1Start = toLocalIsoString(breakDate);
              } else {
-                 // Fallback: This condition should ideally not be met with the midpoint calculation, 
-                 // but as a final safety measure, we log and skip the break.
-                 log('Warning: Midpoint placement failed or logic error. Skipping '+breakMin+' min break for PN '+pn, 'warn');
+                 log('Warning: Midpoint placement failed. Skipping '+breakMin+' min break for PN '+pn, 'warn');
                  breakMin = 0; 
              }
         }
       }
 
+      // Store the name in the payload for DEBUGGING/LOGGING purposes (removed before send)
+      var debugName = row['Employee'] || 'Unknown Employee';
+
       var payload={
+        _debugName: debugName, // Temporary field
         employeeId:Number(emp.employeeId||emp.id||0),
         departmentId:String(departmentId||defaults.departmentId||''),
         roleId:Number(roleId||defaults.roleId||0),
@@ -638,7 +628,7 @@
         break2Minutes:0,
         chargedDate:chargedDate,
         contractId:'',
-        endDateTime:endIso, // Now uses local time
+        endDateTime:endIso,
         isAvailableForCurrentRoleOnly:true,
         isPaidBreak1:false,
         isPaidBreak2:false,
@@ -653,7 +643,7 @@
         shiftPayFactor:1,
         shiftTypeId:0,
         shouldBePublished:false,
-        startDateTime:startIso // Now uses local time
+        startDateTime:startIso
       };
       payloads.push(payload)
     }
@@ -725,7 +715,12 @@
       document.getElementById('statDept').textContent=out.report.ambiguousDepartments.length;
       
       // Update details panels
-      document.getElementById('preview').textContent=out.payloads.length > 0 ? JSON.stringify(out.payloads.slice(0,3),null,2) : 'No payloads were generated.';
+      // We strip the debug name for preview consistency
+      var cleanPreview = out.payloads.slice(0,3).map(function(p){ 
+          var c = Object.assign({}, p); delete c._debugName; return c; 
+      });
+      document.getElementById('preview').textContent=out.payloads.length > 0 ? JSON.stringify(cleanPreview,null,2) : 'No payloads were generated.';
+      
       document.getElementById('report').textContent=JSON.stringify({
           skippedRows:out.report.skipped.slice(0,10).map(r => ({ reason: r.reason, employee: r.row.Employee, date: r.row.Date, role: r.row.Role })),
           unmappedRoles:out.report.unmappedRoles,
@@ -752,7 +747,9 @@
       return
     }
 
-    var token=document.getElementById('token').value.trim();
+    // Always get the latest token from the input (in case user updated it manually)
+    var tokenInput = document.getElementById('token');
+    var token = tokenInput.value.trim();
     var locationId=document.getElementById('locationId').value.trim();
     
     if(!token||!locationId){
@@ -777,7 +774,6 @@
 
     progressWrap.style.display='block';
     
-    // Wire click handler once
     document.getElementById('cancelBtn').onclick=function(){
       cancel=true;
       document.getElementById('cancelBtn').disabled = true;
@@ -786,7 +782,6 @@
     
     function fmt(t){var m=Math.floor(t/60);var s=Math.floor(t%60);return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
     
-    // Use textContent instead of innerHTML to prevent button recreation
     function upd(done,total){
       var elapsed=(Date.now()-start)/1000;
       var rate=done?elapsed/done:0;
@@ -806,79 +801,103 @@
       }
       
       var p=payloads[i];
+      // Capture the name for logs, then remove it from the object we send
+      var empName = p._debugName || ('ID: ' + p.employeeId);
+      
       var s=p.employeeId+'|'+p.startDateTime+'|'+p.endDateTime+'|'+p.roleId+'|'+p.departmentId;
       
-      // Advance progress even on skips
       if(sig.has(s)){
-        log('Skip duplicate '+s,'warn');
+        log('Skip duplicate shift for '+empName,'warn');
         upd(i+1,total);
         continue
       }
       sig.add(s);
       
-      if(p.shouldBePublished||p.publishType===1){
-        log('Incoming payload requested publish. Overriding to draft.','warn')
-      }
-      
+      // Create clean body (remove _debugName)
       var body=Object.assign({},p,{shouldBePublished:false,publishType:0});
+      delete body._debugName; 
+
       var departmentId=String(p.departmentId||'');
       var endpoint='https://schedulingapi.teamhours.com/locations/'+encodeURIComponent(locationId)+'/departments/'+encodeURIComponent(departmentId)+'/shifts';
       
-      // Advance progress even on skips
       if(!departmentId){
-        log('Skip: missing departmentId for emp '+p.employeeId+' '+p.startDateTime,'err');
+        log('Skip: missing departmentId for '+empName,'err');
         fail++;
         upd(i+1,total);
         continue
       }
       
-      // Retry logic for POST requests
+      // -- RETRY LOGIC WITH AUTH PROMPT --
+      let success = false;
+      let attempt = 0;
       const POST_MAX_RETRIES = 3;
-      let postSuccess = false;
 
-      for (let attempt = 0; attempt < POST_MAX_RETRIES; attempt++) {
-        try{
-          var res=await fetch(endpoint,{
-            method:'POST',
-            headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,'Accept':'application/json'},
-            body:JSON.stringify(body)
-          });
+      while (attempt < POST_MAX_RETRIES && !success && !cancel) {
+          try {
+              // Ensure we use the latest token (in case it was updated in a previous loop iteration)
+              token = tokenInput.value.trim(); 
 
-          if(!res.ok){
-            var txt=await res.text();
-            throw new Error('POST '+res.status+' for emp '+p.employeeId+' '+p.startDateTime+' -> '+txt.slice(0,200));
-          } else {
-            // Success
-            await res.text();
-            log('Created shift for emp '+p.employeeId+' ('+p.startDateTime.slice(0, 16)+')','ok');
-            ok++;
-            postSuccess = true;
-            break; // Exit retry loop on success
+              var res = await fetch(endpoint, {
+                  method: 'POST',
+                  headers: { 
+                      'Content-Type': 'application/json', 
+                      'Authorization': 'Bearer ' + token, 
+                      'Accept': 'application/json' 
+                  },
+                  body: JSON.stringify(body)
+              });
+
+              if (res.status === 401 || res.status === 403) {
+                  // PAUSE EXECUTION - PROMPT USER
+                  log('Token expired while processing ' + empName + '. Pausing...', 'err');
+                  let newToken = prompt("⚠️ API Token Expired!\n\nThe token died while processing " + empName + ".\nPaste a NEW token below to resume immediately without losing progress:");
+                  
+                  if (newToken && newToken.trim().length > 10) {
+                      tokenInput.value = newToken.trim(); // Update UI
+                      token = newToken.trim(); // Update local var
+                      log('Token updated by user. Resuming...', 'ok');
+                      // Reset attempts so we get a fresh set of tries with the new token
+                      attempt = -1; 
+                  } else {
+                      log('User cancelled token update. Process aborted.', 'err');
+                      cancel = true;
+                      break; 
+                  }
+              } else if (!res.ok) {
+                  var txt = await res.text();
+                  throw new Error(res.status + ' - ' + txt.slice(0, 150));
+              } else {
+                  // Success
+                  await res.text();
+                  log('Created shift for ' + empName + ' (' + p.startDateTime.slice(0, 10) + ')', 'ok');
+                  ok++;
+                  success = true;
+              }
+
+          } catch (e) {
+              if (cancel) break;
+              
+              log(`Attempt ${attempt + 1} failed for ${empName}: ${e.message}`, 'warn');
+              if (attempt < POST_MAX_RETRIES - 1) {
+                  await sleep(Math.pow(2, attempt) * 1000);
+              } else {
+                  // Final failure after retries
+                  log('FAILED to create shift for ' + empName, 'err');
+                  fail++;
+              }
           }
-        }catch(e){
-          log(`Attempt ${attempt + 1} failed: ${e.message.split('\n')[0]}`, 'err');
-          if (attempt < POST_MAX_RETRIES - 1) {
-              await sleep(Math.pow(2, attempt) * 1000);
-          } else {
-              // Last attempt failed
-              fail++;
-          }
-        }
+          attempt++;
       }
 
-      // Advance progress regardless of success/failure after the API attempts
       upd(i+1,total);
       
-      // Rate limit only on success
-      if (postSuccess) {
-          await sleep(200); 
-      }
+      // Rate limit slightly
+      if (success) await sleep(200); 
     }
     
     log('Done. Success: '+ok+', Failed: '+fail,fail?'warn':'ok');
     progressWrap.style.display='none';
-    document.getElementById('createShifts').disabled=false;
-    // Reset cancel button state
+    createBtn.disabled=false;
     document.getElementById('cancelBtn').disabled = false;
     document.getElementById('cancelBtn').textContent = 'Stop';
   }
@@ -895,7 +914,11 @@
         log('No payloads to download','err');
         return
       }
-      download('fourth_shift_payloads_dry_run.json',JSON.stringify(payloads,null,2))
+      // Clean debug name before download
+      var clean = payloads.map(function(p){ 
+          var c = Object.assign({}, p); delete c._debugName; return c; 
+      });
+      download('fourth_shift_payloads_dry_run.json',JSON.stringify(clean,null,2))
     });
     
     var createBtn=document.getElementById('createShifts');
@@ -922,14 +945,11 @@
   document.addEventListener('DOMContentLoaded',function(){
     try{
       var today=new Date();
-      // Calculate next Monday
       var day=today.getDay();
-      var diffToMon=day===0?1:8-day; // If today is Sunday (0), next Mon is 1 day away. Otherwise, 8 - current day of week.
-      
+      var diffToMon=day===0?1:8-day; 
       var nextMonday=new Date(today);
       nextMonday.setDate(today.getDate()+diffToMon);
-      nextMonday.setHours(0,0,0,0); // Reset time to midnight for clean date input
-
+      nextMonday.setHours(0,0,0,0); 
       var nextSunday=new Date(nextMonday);
       nextSunday.setDate(nextMonday.getDate()+6);
 
@@ -937,7 +957,6 @@
       var start=document.getElementById('startDate');
       var end=document.getElementById('endDate');
       
-      // Set to next Monday/Sunday only if inputs are empty
       if(start&&!start.value)start.value=fmt(nextMonday);
       if(end&&!end.value)end.value=fmt(nextSunday)
     }catch(e){}
