@@ -3,574 +3,796 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RotoFo</title>
+  <title>RotaCloud to Fourth</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ----------------------------------------------------------------- */
-    /* PURE AESTHETIC */
-    /* ----------------------------------------------------------------- */
     :root {
-      --bg-primary: #f8f8fa;          /* Very light background for depth */
-      --bg-card: #ffffff;             /* Crisp white card background */
-      --text-dark: #1c1c1e;           /* Primary text */
-      --text-muted: #6a6a6a;          /* Secondary/Label text */
-      --border-subtle: #e5e5e9;       /* Light, dividing line color */
-      --accent-blue: #007aff;         /* iOS Blue */
-      --accent-red: #ff3b30;          /* System Red (Danger) */
-      --accent-green: #34c759;        /* System Green (Success) */
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --text-primary: #1d1d1f;
+      --text-secondary: #86868b;
+      --border: #d5d5d7;
+      --accent: #0071e3;
+      --success: #34c759;
+      --error: #ff3b30;
+      --warning: #ff9500;
     }
+
+    * { box-sizing: border-box; }
     html, body {
       height: 100%;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       -webkit-font-smoothing: antialiased;
-    }
-    body {
       margin: 0;
-      background-color: var(--bg-primary);
-      color: var(--text-dark);
-      padding: 30px 20px 80px 20px;
-    }
-    .container-wrap {
-      max-width: 760px;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
-    /* Titles & Subtitles */
-    .app-title {
-      font-size: 36px;
-      font-weight: 800;
-      text-align: center;
-      margin-bottom: 4px;
-    }
-    .app-subtitle {
-        color: var(--text-muted);
-        font-size: 16px;
-        text-align: center;
-        margin-bottom: 40px;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
+    body {
+      background: linear-gradient(180deg, var(--bg-primary) 0%, #f8fafc 100%);
+      color: var(--text-primary);
+      padding: 40px 20px 60px;
     }
 
-    /* Card Component (Key to the aesthetic: large radius, soft shadow) */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    header {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .logo-text {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
     .card {
-      background-color: var(--bg-card);
-      border-radius: 28px; /* High radius */
-      margin-bottom: 28px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft, lifted shadow */
-      overflow: hidden; /* Contains the list group elements */
+      background: var(--bg-secondary);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(0, 0, 0, 0.2);
     }
-    h2 {
-        font-size: 20px;
-        font-weight: 700;
-        padding: 24px 28px 0 28px;
-        color: var(--text-dark);
-    }
-    .card-content {
-        padding: 0 28px 28px 28px;
-    }
-    
-    /* List Group Style (iOS Settings) */
-    .list-group {
-        margin-top: 16px;
-        border-radius: 12px;
-        border: 1px solid var(--border-subtle);
-        background: #ffffff;
-        overflow: hidden;
-    }
-    .list-item {
-        display: flex;
-        align-items: center;
-        padding: 12px 16px;
-        background: transparent;
-    }
-    .list-item:not(:last-child) {
-        border-bottom: 1px solid var(--border-subtle);
-    }
-    .list-label {
-        flex-shrink: 0;
-        width: 150px; /* Fixed width for labels */
-        font-size: 15px;
-        font-weight: 500;
-        color: var(--text-dark);
-    }
-    .list-input-container {
-        flex-grow: 1;
-        min-width: 0; /* Important for flex overflow */
-    }
-    .list-input {
-        width: 100%;
-        border: none;
-        padding: 0;
-        background: transparent;
-        font-size: 15px;
-        color: var(--text-dark);
-        outline: none;
-    }
-    
-    /* Input Adjustments for Password/Date/Select */
-    .list-item input[type="password"],
-    .list-item input[type="date"],
-    .list-item select {
-        min-height: 20px; /* Match text height */
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-    }
-    
-    /* Buttons (iOS-style filled and system action) */
-    .btn {
-      cursor: pointer;
-      min-height: 44px;
-      padding: 10px 20px;
-      border-radius: 12px;
+
+    .card-title {
+      font-size: 17px;
       font-weight: 600;
-      transition: all 0.2s;
-      border: none;
-      font-size: 16px;
-      line-height: 1.5;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .btn-primary {
-      background-color: var(--accent-blue);
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
       color: white;
-      box-shadow: 0 2px 8px rgba(0, 122, 255, 0.4);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
     }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    input[type="file"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text-primary);
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    input[type="number"]:focus,
+    input[type="file"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .file-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-name {
+      flex: 1;
+      font-size: 15px;
+      color: var(--text-secondary);
+      padding: 10px 0;
+    }
+
+    .file-name.selected {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .file-label {
+      padding: 8px 14px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .file-label:hover {
+      background: rgba(0, 113, 227, 0.05);
+      border-color: var(--accent);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .metric {
+      background: var(--bg-primary);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .metric.success .metric-value { color: var(--success); }
+    .metric.error .metric-value { color: var(--error); }
+    .metric.info .metric-value { color: var(--text-primary); }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      flex: 1;
+      min-width: 140px;
+    }
+
     .btn-primary:hover:not(:disabled) {
-      background-color: #0060c0;
-      box-shadow: 0 3px 10px rgba(0, 122, 255, 0.5);
+      background: #0066d6;
     }
+
+    .btn-primary:active:not(:disabled) {
+      background: #005cc1;
+    }
+
     .btn-secondary {
-      background-color: transparent;
-      color: var(--accent-blue);
-      border: 1px solid var(--accent-blue);
+      background: var(--bg-primary);
+      color: var(--accent);
+      border: 1px solid var(--border);
+      flex: 0 1 auto;
     }
+
     .btn-secondary:hover:not(:disabled) {
-      background-color: rgba(0, 122, 255, 0.05);
+      background: rgba(0, 113, 227, 0.05);
+      border-color: var(--accent);
     }
+
+    .btn-danger {
+      background: var(--error);
+      color: white;
+      padding: 8px 12px;
+      font-size: 13px;
+      min-width: auto;
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: #ff3b2d;
+    }
+
     .btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      box-shadow: none;
-    }
-    
-    /* Metrics Panel */
-    .metrics-panel {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 10px;
-        padding: 15px 0;
-    }
-    .metric-box {
-      text-align: center;
-      padding: 14px 4px;
-      background: var(--bg-primary); /* Slightly recessed for a clean look */
-      border-radius: 10px;
-    }
-    .metric-box strong {
-      display: block;
-      font-size: 28px;
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 2px;
-    }
-    .metric-box small {
-      color: var(--text-muted);
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .metric-box[data-status="matched"] strong { color: var(--accent-green); }
-    .metric-box[data-status="skipped"] strong { color: var(--accent-red); }
-    .metric-box[data-status="info"] strong { color: var(--text-dark); } 
-    
-    /* Log & Preview (System Console Look) */
-    .log-box {
-      background: #000000; /* Dark mode for console/log */
-      border-radius: 12px;
-      padding: 16px;
-      height: 220px;
-      overflow: auto;
-      white-space: pre-wrap;
-      font-family: monospace;
-      font-size: 13px;
-      color: #f0f0f0; /* Light text on dark background */
-      line-height: 1.4;
-      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4);
-    }
-    
-    /* Progress Bar */
-    .progress-container {
-        margin-top: 15px;
-        display: none;
-    }
-    .progress-bar-wrap {
-      height: 7px;
-      background: var(--border-subtle);
-      border-radius: 3.5px;
-      overflow: hidden;
-      margin-bottom: 8px;
-    }
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background-color: var(--accent-blue);
-      transition: width 0.3s ease-out;
-    }
-    .progress-info {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 14px;
-        color: var(--text-muted);
-    }
-    .progress-info .btn-stop {
-        padding: 4px 10px;
-        font-size: 13px;
-        color: white;
-        background-color: var(--accent-red);
-        border-radius: 8px;
-        min-height: 30px;
-        box-shadow: 0 1px 4px rgba(255, 59, 48, 0.3);
-    }
-    
-    /* Custom File Input Styling for better alignment */
-    .file-input-container {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .file-input-label {
-        font-size: 14px;
-        color: var(--text-muted);
-        text-decoration: underline;
-        cursor: pointer;
-    }
-    .list-item input[type="file"] {
-        display: none; /* Hide native file input */
     }
 
-    /* Diagnostics Section (List style, not full log box) */
-    .diagnostic-panel {
-        padding: 20px;
-        margin-top: 20px;
-        background: #f0f0f5; /* Slightly darker background for this section */
-        border-radius: 16px;
+    .progress-container {
+      margin-top: 20px;
+      display: none;
     }
-    
-    /* Responsive Adjustments */
+
+    .progress-bar-wrapper {
+      margin-bottom: 12px;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.3s ease-out;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .progress-info .controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .activity-log {
+      background: linear-gradient(180deg,#0b0b0d 0%, #151516 100%);
+      border-radius: 12px;
+      padding: 12px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+      color: #f5f5f7;
+      min-height: 220px;
+      max-height: 480px;
+      overflow: auto;
+      line-height: 1.5;
+      border-left: 4px solid rgba(0,113,227,0.14);
+      box-shadow: inset 0 -6px 14px rgba(0,0,0,0.45);
+    }
+
+    .log-entry {
+      margin-bottom: 6px;
+      white-space: pre-wrap;
+    }
+
+    .log-entry.ok { color: var(--success); }
+    .log-entry.err { color: var(--error); }
+    .log-entry.warn { color: var(--warning); }
+
+    .details-section {
+      margin-top: 16px;
+    }
+
+    .details-toggle {
+      cursor: pointer;
+      padding: 12px;
+      background: var(--bg-primary);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-primary);
+      transition: background 0.2s;
+    }
+
+    .details-toggle:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .details-toggle span { display:inline-block; transition: transform 220ms ease-in-out; }
+
+    .details-content {
+      max-height: 0;
+      overflow: hidden;
+      margin-top: 8px;
+      transition: max-height 240ms ease-in-out, opacity 200ms ease-in-out;
+      opacity: 0;
+    }
+
+    .details-content.open {
+      opacity: 1;
+      max-height: 420px;
+    }
+
+    .code-block {
+      background: #1c1c1e;
+      color: #f0f0f0;
+      border-radius: 12px;
+      padding: 12px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow: auto;
+      line-height: 1.4;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--text-secondary);
+      padding: 20px;
+      font-size: 13px;
+    }
+
+    .group-filter-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .group-filter-label input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 42px;
+      height: 26px;
+      background: #e6e7eb;
+      border-radius: 999px;
+      position: relative;
+      outline: none;
+      flex: 0 0 auto;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
+      transition: background 180ms ease-in-out;
+    }
+
+    .group-filter-label input[type="checkbox"]::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: transform 180ms ease-in-out;
+    }
+
+    .group-filter-label input[type="checkbox"]:checked {
+      background: var(--accent);
+    }
+
+    .group-filter-label input[type="checkbox"]:checked::after {
+      transform: translateX(16px);
+    }
+
+    .code-block {
+      background: #1c1c1e;
+      color: #f0f0f0;
+      border-radius: 12px;
+      padding: 12px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow: auto;
+      line-height: 1.4;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--text-secondary);
+      padding: 20px;
+      font-size: 13px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+      padding-bottom: 20px;
+      padding-top: 20px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(0, 113, 227, 0.1);
+      color: var(--accent);
+    }
+
+    .status-badge.paused {
+      background: rgba(255, 149, 0, 0.1);
+      color: var(--warning);
+    }
+
+    @media (max-width: 1024px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 640px) {
-        .app-title {
-            font-size: 30px;
-        }
-        .list-item {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .list-label {
-            width: 100%;
-            margin-bottom: 4px;
-        }
-        .list-group {
-            border-radius: 18px;
-        }
-        .card {
-            border-radius: 20px;
-        }
+      body {
+        padding: 24px 16px 48px;
+      }
+
+      .logo-text {
+        font-size: 28px;
+      }
+
+      .card {
+        padding: 16px;
+      }
+
+      .button-group {
+        flex-direction: column-reverse;
+      }
+
+      .btn-primary {
+        width: 100%;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container-wrap">
+  <div class="container">
     <header>
-        <h1 class="app-title">RotoFo</h1>
+      <div class="logo-text">RotaCloud to Fourth</div>
     </header>
 
-    <div class="card">
-      <h2>1. Fourth Connection</h2>
-      <div class="card-content">
-        <div class="list-group">
-            <div class="list-item">
-                <label for="token" class="list-label">API Bearer Token</label>
-                <div class="list-input-container">
-                    <input id="token" class="list-input" type="text" placeholder="Paste secure token" autocomplete="off" />
-                </div>
-            </div>
-            <div class="list-item">
-                <label for="locationId" class="list-label">Location ID</label>
-                <div class="list-input-container">
-                    <input id="locationId" class="list-input" type="text" value="6921" placeholder="e.g., 6921" />
-                </div>
-            </div>
-            <div class="list-item">
-                <label for="departmentId" class="list-label">Target Dept ID(s)</label>
-                <div class="list-input-container">
-                    <input id="departmentId" class="list-input" type="text" value="27156,42087" placeholder="Comma separated, e.g., 27156, 42087" />
-                </div>
-            </div>
-        </div>
+    <div class="cards-grid">
+      <!-- Step 1: Connection -->
+      <div class="card">
+      <div class="card-title">
+        <span class="step-badge">1</span>
+        API Connection
+      </div>
+      <div class="form-group">
+        <label for="token">Bearer Token</label>
+        <input id="token" type="text" placeholder="Paste your Fourth API token" autocomplete="off" />
+      </div>
+      <div class="form-group">
+        <label for="locationId">Location ID</label>
+        <input id="locationId" type="text" value="6921" placeholder="e.g., 6921" />
+      </div>
+      <div class="form-group">
+        <label for="departmentId">Department IDs</label>
+        <input id="departmentId" type="text" value="27156,42087" placeholder="Comma-separated, e.g., 27156, 42087" />
       </div>
     </div>
 
+    <!-- Step 2: Data & Dates -->
     <div class="card">
-      <h2>2. Data & Dates</h2>
-      <div class="card-content">
-        <div class="list-group">
-            <div class="list-item">
-                <label for="startDate" class="list-label">Week Start Date</label>
-                <div class="list-input-container">
-                    <input id="startDate" class="list-input" type="date" />
-                </div>
-            </div>
-            <div class="list-item">
-                <label for="endDate" class="list-label">Week End Date</label>
-                <div class="list-input-container">
-                    <input id="endDate" class="list-input" type="date" />
-                </div>
-            </div>
-            <div class="list-item">
-                <label for="csvFile" class="list-label">CSV Export</label>
-                <div class="list-input-container file-input-container">
-                    <input id="csvFile" type="file" accept=".csv" />
-                    <span id="fileNameDisplay" class="text-sm text-gray-400">No file selected</span>
-                    <label for="csvFile" class="file-input-label ml-auto">Choose File...</label>
-                </div>
-            </div>
-        </div>
-        
-        <div class="mt-6">
-            <button id="run" class="btn btn-primary w-full">Run Dry Analysis</button>
+      <div class="card-title">
+        <span class="step-badge">2</span>
+        Select Period & CSV
+      </div>
+      <div class="form-group">
+        <label for="startDate">Start Date</label>
+        <input id="startDate" type="date" />
+      </div>
+      <div class="form-group">
+        <label for="endDate">End Date</label>
+        <input id="endDate" type="date" />
+      </div>
+      <div class="form-group">
+        <label>CSV Export</label>
+        <div class="file-input-wrapper">
+          <input id="csvFile" type="file" accept=".csv" />
+          <span id="fileNameDisplay" class="file-name">No file selected</span>
+          <label for="csvFile" class="file-label">Choose File</label>
         </div>
       </div>
+      <div id="groupFilterContainer" style="display: none; margin-top: 16px; padding: 12px; background: var(--bg-primary); border-radius: 8px;">
+        <label style="font-size: 12px; margin-bottom: 8px; display: block;">Filter by Group</label>
+        <div id="groupCheckboxes" style="display: flex; flex-direction: column; gap: 6px;"></div>
+      </div>
+      <button id="analyzeBtn" class="btn btn-primary" style="width: 100%; margin-top: 12px;">Analyze CSV</button>
     </div>
 
+    <!-- Step 3: Review & Create -->
     <div class="card">
-      <h2>3. Analysis Summary & Action</h2>
-      <div class="card-content">
-        <div class="metrics-panel">
-            <div class="metric-box" data-status="info">
-              <strong id="statCsv">0</strong>
-              <small>CSV Rows</small>
-            </div>
-            <div class="metric-box" data-status="matched">
-              <strong id="statMatched">0</strong>
-              <small>Draft Payloads</small>
-            </div>
-            <div class="metric-box" data-status="skipped">
-              <strong id="statSkipped">0</strong>
-              <small>Skipped Shifts</small>
-            </div>
-            <div class="metric-box" data-status="info">
-              <strong id="statRoles">0</strong>
-              <small>Unmapped Roles</small>
-            </div>
-            <div class="metric-box" data-status="info">
-              <strong id="statDept">0</strong>
-              <small>Ambiguous Depts</small>
-            </div>
-        </div>
+      <div class="card-title">
+        <span class="step-badge">3</span>
+        Review & Create Shifts
+      </div>
 
-        <div id="progressWrap" class="progress-container">
-          <div class="progress-bar-wrap">
-            <div id="progressBar" class="progress-bar"></div>
-          </div>
-          <div class="progress-info">
-             <span id="progressText">0/0 • 0% • Elapsed 00:00 • ETA --:--</span>
-             <button id="cancelBtn" class="btn btn-stop">Stop</button>
+      <div class="metrics">
+        <div class="metric info">
+          <div class="metric-value" id="statCsv">0</div>
+          <div class="metric-label">CSV Rows</div>
+        </div>
+        <div class="metric success">
+          <div class="metric-value" id="statMatched">0</div>
+          <div class="metric-label">Ready</div>
+        </div>
+        <div class="metric error">
+          <div class="metric-value" id="statSkipped">0</div>
+          <div class="metric-label">Skipped</div>
+        </div>
+        <div class="metric info">
+          <div class="metric-value" id="statRoles">0</div>
+          <div class="metric-label">Unmapped</div>
+        </div>
+      </div>
+
+      <div id="progressContainer" class="progress-container">
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
           </div>
         </div>
-        
-        <div class="flex flex-col sm:flex-row justify-end items-center mt-6 gap-3">
-          <button id="downloadJson" disabled class="btn btn-secondary w-full sm:w-auto">Download Payloads (JSON)</button>
-          <button id="createShifts" disabled class="btn btn-primary w-full sm:w-auto">Create Shifts</button>
+        <div class="progress-info">
+          <span id="progressText">Initializing...</span>
+          <div class="controls">
+            <button id="pauseBtn" class="btn btn-secondary" disabled>Pause</button>
+            <button id="stopBtn" class="btn btn-danger">Stop</button>
+          </div>
         </div>
+      </div>
+
+      <div class="button-group">
+        <button id="downloadBtn" class="btn btn-secondary" disabled>Export JSON</button>
+        <button id="createBtn" class="btn btn-primary" disabled>Create Shifts</button>
       </div>
     </div>
 
+    <!-- Step 4: Activity Log -->
     <div class="card">
-        <h2>4. Live Activity Log</h2>
-        <div class="card-content">
-            <p class="text-xs text-gray-500 mb-3">Monitor API calls and processing warnings/errors in real-time.</p>
-            <pre id="log" class="log-box h-52"></pre>
+      <div class="card-title">
+        <span class="step-badge">4</span>
+        Activity Log
+      </div>
+      <div id="log" class="activity-log"><div class="empty-state">Logs will appear here</div></div>
 
-            <div class="diagnostic-panel mt-4">
-                <details class="mb-2">
-                  <summary class="font-semibold text-sm cursor-pointer list-none flex justify-between items-center text-gray-700">Payload Preview (First 3 Drafts) <span class="text-xs text-gray-400">Click to expand &raquo;</span></summary>
-                  <pre id="preview" class="log-box h-48 mt-2 !bg-gray-800 !text-white !font-mono">Run the analysis above to see data previews.</pre>
-                </details>
-                
-                <details>
-                  <summary class="font-semibold text-sm cursor-pointer list-none flex justify-between items-center text-gray-700">Error & Warning Report <span class="text-xs text-gray-400">Click to expand &raquo;</span></summary>
-                  <pre id="report" class="log-box h-48 mt-2 !bg-gray-800 !text-white !font-mono">Run the analysis above to see errors and warnings.</pre>
-                </details>
-            </div>
-        </div>
+      <!-- Payload preview and report removed per user request -->
+    </div>
     </div>
 
-    <footer class="text-xs text-slate-500 dark:text-slate-500 pt-2 pb-8">
-        <p>RotoFo Importer v0.6 • © 2025 elroydr</p>
+    <footer>
+      <p>RotoFo v0.7 • Shift scheduling simplified</p>
     </footer>
-
   </div>
 
 <script>
 (function(){
-  // --- Core Utility Functions ---
-
-  function log(line,type){
-    var box=document.getElementById('log');
-    if (!box) { console.warn('Log element missing:', line); return; }
-    var ts=new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    var color = type === 'err' ? 'var(--accent-red)' : type === 'ok' ? 'var(--accent-green)' : '#999999';
-    var prefix = type === 'err' ? '[ERR]' : type === 'ok' ? '[OK ]' : '[.. ]';
+  // --- Utility fns ---
+  function log(line, type){
+    var box = document.getElementById('log');
+    if(!box) return;
+    var ts = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    var className = type === 'err' ? 'err' : type === 'ok' ? 'ok' : type === 'warn' ? 'warn' : '';
+    var prefix = type === 'err' ? '✕' : type === 'ok' ? '✓' : type === 'warn' ? '⚠' : '•';
     
-    var span = document.createElement('span');
-    span.style.color = color;
-    span.textContent = prefix + ' ' + ts + '  ' + line + '\n';
+    // Clear empty state
+    if(box.querySelector('.empty-state')) box.textContent = '';
     
-    box.appendChild(span);
-    box.scrollTop=box.scrollHeight
+    var entry = document.createElement('div');
+    entry.className = 'log-entry ' + className;
+    entry.textContent = prefix + ' ' + ts + ' — ' + line;
+    box.appendChild(entry);
+    box.scrollTop = box.scrollHeight;
   }
 
-  // Parses DD/MM/YYYY and HH:MM into a Date object (local time)
-  function parseDateAndTime(dateStr, timeStr) {
+  function toggleDetails(el){
+    var content = el.nextElementSibling;
+    if(!content) return;
+    content.classList.toggle('open');
+    el.setAttribute('aria-expanded', content.classList.contains('open') ? 'true' : 'false');
+    var arrow = el.querySelector('span');
+    if(arrow) arrow.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+  }
+
+  function normalizeTime(timeStr){
+    // If time ends with :01, normalize to :00
+    if(String(timeStr).endsWith(':01')) return String(timeStr).slice(0, -2) + '00';
+    return timeStr;
+  }
+
+  function extractGroupsFromCSV(rows){
+    var groups = new Set;
+    rows.forEach(function(row){
+      var g = String(row['Group']||'').trim();
+      if(g) groups.add(g);
+    });
+    return Array.from(groups).sort();
+  }
+
+  function renderGroupFilters(groups){
+    var container = document.getElementById('groupCheckboxes');
+    container.textContent = '';
+    var defaultGroups = ['DO & CO', 'MH Recruitment'];
+    groups.forEach(function(group){
+      var isDefault = defaultGroups.indexOf(group) !== -1;
+      var label = document.createElement('label');
+      label.className = 'group-filter-label';
+      var checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = group;
+      checkbox.checked = isDefault;
+      checkbox.className = 'group-filter-checkbox';
+      checkbox.style.cursor = 'pointer';
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(group));
+      container.appendChild(label);
+    });
+  }
+
+  function getSelectedGroups(){
+    var checkboxes = document.querySelectorAll('.group-filter-checkbox:checked');
+    var selected = [];
+    checkboxes.forEach(function(cb){ selected.push(cb.value); });
+    return selected;
+  }
+
+  function parseDateAndTime(dateStr, timeStr){
+    // Normalize :01 times to :00
+    timeStr = normalizeTime(timeStr);
     var dateParts = String(dateStr).split('/');
     var timeParts = String(timeStr).split(':');
-
-    if (dateParts.length !== 3 || timeParts.length !== 2) return null;
-
-    var D = parseInt(dateParts[0], 10);
-    var M = parseInt(dateParts[1], 10) - 1; // Month is 0-indexed
-    var Y = parseInt(dateParts[2], 10);
-    var h = parseInt(timeParts[0], 10);
-    var m = parseInt(timeParts[1], 10);
-
-    if (isNaN(D) || isNaN(M) || isNaN(Y) || isNaN(h) || isNaN(m)) return null;
-
-    // Use a Date object, which creates it in the local timezone.
+    if(dateParts.length !== 3 || timeParts.length !== 2) return null;
+    var D = parseInt(dateParts[0], 10), M = parseInt(dateParts[1], 10) - 1, Y = parseInt(dateParts[2], 10);
+    var h = parseInt(timeParts[0], 10), m = parseInt(timeParts[1], 10);
+    if(isNaN(D) || isNaN(M) || isNaN(Y) || isNaN(h) || isNaN(m)) return null;
     var d = new Date(Y, M, D, h, m, 0, 0);
-    
-    // Simple validation (e.g., prevents parsing Feb 30)
-    if (d.getFullYear() !== Y || d.getMonth() !== M || d.getDate() !== D) {
-        return null;
-    }
+    if(d.getFullYear() !== Y || d.getMonth() !== M || d.getDate() !== D) return null;
     return d;
   }
-  
-  // Manually constructs the YYYY-MM-DDTHH:MM:SS string using local time components.
+
   function toLocalIsoString(d){
-    var Y = d.getFullYear();
-    var M = String(d.getMonth() + 1).padStart(2, '0');
-    var D = String(d.getDate()).padStart(2, '0');
-    var h = String(d.getHours()).padStart(2, '0');
-    var m = String(d.getMinutes()).padStart(2, '0');
-    var s = String(d.getSeconds()).padStart(2, '0');
-    
+    var Y = d.getFullYear(), M = String(d.getMonth() + 1).padStart(2, '0'), D = String(d.getDate()).padStart(2, '0');
+    var h = String(d.getHours()).padStart(2, '0'), m = String(d.getMinutes()).padStart(2, '0'), s = String(d.getSeconds()).padStart(2, '0');
     return `${Y}-${M}-${D}T${h}:${m}:${s}`;
   }
 
   function parseCSV(text){var rows=[];var i=0,field='',row=[],inQuotes=false;function f(){row.push(field);field=''}function r(){rows.push(row);row=[]}while(i<text.length){var c=text[i];if(c==='"'){if(inQuotes&&text[i+1]==='"'){field+='"';i++}else{inQuotes=!inQuotes}}else if(c===','&&!inQuotes){f()}else if((c==='\n'||c==='\r')&&!inQuotes){f();if(row.length>1||row[0]!=='')r();if(c==='\r'&&text[i+1]==='\n')i++}else{field+=c}i++}if(field.length||row.length){f();r()}if(!rows.length)return[];var headers=rows[0].map(function(h){return h.trim()});return rows.slice(1).map(function(rw){var obj={};headers.forEach(function(h,idx){obj[h]=rw[idx]!==undefined?rw[idx]:''});return obj})}
+
   function normaliseRoleName(s){return String(s||'').trim().toLowerCase().replace(/\s+/g,' ')}
   function extractPersonnelNumber(t){var m=String(t||'').match(/(\d+)(?!.*\d)/);return m?m[1]:null}
+  function download(name,text){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'application/json'}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
 
-  // --- API and Indexing Functions (with Backoff) ---
-  
+  // --- API Functions ---
   async function fetchWeeklySchedule(o){
     var p=new URLSearchParams({loadWeeklyData:'true',sortOrderType:'weekly',dateForWeeklyData:o.endDate});
     var url='https://schedulingapi.teamhours.com/locations/'+encodeURIComponent(o.locationId)+'/departments/'+encodeURIComponent(o.departmentId)+'/from/'+o.startDate+'/to/'+o.endDate+'/schedule-period?'+p;
-    log('GET '+url);
-    
     const MAX_RETRIES = 3;
     let lastError = null;
-
-    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-        try {
-            var res=await fetch(url,{
-                headers:{
-                    'Authorization':'Bearer '+o.token,
-                    'Accept':'application/json'
-                }
-            });
-            if(!res.ok) throw new Error('HTTP '+res.status + ' ' + res.statusText);
-            
-            var data=await res.json();
-            log('Received weekly schedule for dept '+o.departmentId,'ok');
-            return data;
-
-        } catch (e) {
-            lastError = e;
-            if (attempt < MAX_RETRIES - 1) {
-                log(`Attempt ${attempt + 1} failed for ${o.departmentId}. Retrying in ${Math.pow(2, attempt) * 1}s... (${e.message.split('\n')[0]})`, 'warn');
-                await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
-            }
-        }
+    for(let attempt = 0; attempt < MAX_RETRIES; attempt++){
+      try{
+        var res=await fetch(url,{headers:{'Authorization':o.token,'Accept':'application/json'}});
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        var data=await res.json();
+        log('Fetched schedule for dept '+o.departmentId,'ok');
+        return data;
+      }catch(e){
+        lastError = e;
+        if(attempt < MAX_RETRIES - 1) await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+      }
     }
-    
     throw lastError;
   }
-  
+
   async function fetchAndIndexMultipleDepartments({token,locationId,departmentIds,startDate,endDate}){
     var merged={pnToEmp:new Map,roleNameToId:new Map,roleIdToName:new Map};
     for(var i=0;i<departmentIds.length;i++){
-        var dep=departmentIds[i].trim();
-        if(!dep)continue;
-        try {
-            var data=await fetchWeeklySchedule({token:token,locationId:locationId,departmentId:dep,startDate:startDate,endDate:endDate});
-            var idx=indexSchedule(data);
-            
-            // Merge results
-            idx.pnToEmp.forEach(function(v,k){
-                var rec=merged.pnToEmp.get(k)||{employeeId:v.employeeId,mainRoleId:v.mainRoleId,deptIds:new Set};
-                v.deptIds.forEach(function(d){rec.deptIds.add(d)});
-                merged.pnToEmp.set(k,rec)
-            });
-            idx.roleNameToId.forEach(function(v,k){merged.roleNameToId.set(k,v)});
-            idx.roleIdToName.forEach(function(v,k){merged.roleIdToName.set(k,v)});
-
-        } catch (e) {
-            log('Skipping department '+dep+' due to fetch error: '+e.message,'err');
-        }
+      var dep=departmentIds[i].trim();
+      if(!dep)continue;
+      try{
+        var data=await fetchWeeklySchedule({token:token,locationId:locationId,departmentId:dep,startDate:startDate,endDate:endDate});
+        var idx=indexSchedule(data);
+        idx.pnToEmp.forEach(function(v,k){var rec=merged.pnToEmp.get(k)||{employeeId:v.employeeId,mainRoleId:v.mainRoleId,deptIds:new Set};v.deptIds.forEach(function(d){rec.deptIds.add(d)});merged.pnToEmp.set(k,rec)});
+        idx.roleNameToId.forEach(function(v,k){merged.roleNameToId.set(k,v)});
+        idx.roleIdToName.forEach(function(v,k){merged.roleIdToName.set(k,v)});
+      }catch(e){
+        log('Department '+dep+' skipped: '+e.message,'err');
+      }
     }
-    return merged
+    return merged;
   }
 
   function indexSchedule(data){var pnToEmp=new Map;var roleNameToId=new Map;var roleIdToName=new Map;var days=Array.isArray(data.schedule)?data.schedule:[];for(var di=0;di<days.length;di++){var day=days[di];var employees=day.employees||{};Object.keys(employees).forEach(function(k){var emp=employees[k];var pn=String(emp.personnelNumber||'').trim();if(!pn)return;var rec=pnToEmp.get(pn)||{employeeId:emp.id,mainRoleId:emp.mainRoleId,deptIds:new Set};if(Array.isArray(emp.weeklyHoursByDepartment)){emp.weeklyHoursByDepartment.forEach(function(w){if(w&&w.departmentId!=null)rec.deptIds.add(String(w.departmentId))})}pnToEmp.set(pn,rec)});var roles=day.roles||{};Object.keys(roles).forEach(function(rid){var r=roles[rid];if(!r)return;var name=String(r.roleName||'').trim();if(name){var key=normaliseRoleName(name);roleNameToId.set(key,Number(rid));roleIdToName.set(Number(rid),name)}})}return{pnToEmp:pnToEmp,roleNameToId:roleNameToId,roleIdToName:roleIdToName}}
-  
-  // --- Dry Run Logic ---
 
-  function buildDryRun(rows,idx,defaults){
+  // --- Dry Run ---
+  function buildDryRun(rows,idx,defaults,selectedGroups){
     var report={skipped:[],unmappedRoles:new Set,ambiguousDepartments:[],matched:0};
     var payloads=[];
-
     for(var i=0;i<rows.length;i++){
       var row=rows[i];
-      var pn=extractPersonnelNumber(row['Employee']);
-
-      if(!pn){report.skipped.push({reason:'no personnel number',row:row});continue}
-      var emp=idx.pnToEmp.get(pn);
-      if(!emp){report.skipped.push({reason:'person not in Fourth for week',personnelNumber:pn,row:row});continue}
-
-      var startDate = parseDateAndTime(row['Date'], row['Start Time']);
-      var endDate = parseDateAndTime(row['Date'], row['End Time']);
-
-      if (!startDate || !endDate) {
-          report.skipped.push({reason:'bad date or time (DD/MM/YYYY format expected)', row:row});
-          continue;
+      
+      // Filter by selected groups
+      var rowGroup = String(row['Group']||'').trim();
+      if(selectedGroups && selectedGroups.length > 0 && selectedGroups.indexOf(rowGroup) === -1){
+        report.skipped.push({reason:'group not selected',group:rowGroup,row:row});
+        continue;
       }
       
-      var startLocalTime = toLocalIsoString(startDate).slice(11, 16);
-      var endLocalTime = toLocalIsoString(endDate).slice(11, 16);
-
-      // 1. Handle overnight shifts (if end time is before start time, increment end date)
-      if (endDate.getTime() <= startDate.getTime()) {
-          endDate.setDate(endDate.getDate() + 1);
-          log('Shift for PN '+pn+' crosses midnight ('+startLocalTime+' to '+endLocalTime+'). End date incremented to '+toLocalIsoString(endDate).slice(0,10), 'warn');
+      var pn=extractPersonnelNumber(row['Employee']);
+      if(!pn){report.skipped.push({reason:'no employee number',row:row});continue}
+      var emp=idx.pnToEmp.get(pn);
+      if(!emp){report.skipped.push({reason:'employee not found',pn:pn,row:row});continue}
+      
+      var startDate = parseDateAndTime(row['Date'], row['Start Time']);
+      var endDate = parseDateAndTime(row['Date'], row['End Time']);
+      if(!startDate || !endDate){report.skipped.push({reason:'invalid date/time',row:row});continue}
+      
+      if(endDate.getTime() <= startDate.getTime()){
+        endDate.setDate(endDate.getDate() + 1);
       }
 
       var startIso = toLocalIsoString(startDate);
       var endIso = toLocalIsoString(endDate);
-
       var chargedDate=startIso.slice(0,10)+'T00:00:00';
       var roleNameCsv=normaliseRoleName(row['Role']);
       var roleId=idx.roleNameToId.get(roleNameCsv);
@@ -579,50 +801,33 @@
       var depts=Array.from(emp.deptIds);
       var departmentId=null;
       if(depts.length===1){departmentId=depts[0];}
-      else if(depts.length>1){report.ambiguousDepartments.push({personnelNumber:pn,departments:depts});}
-      else{report.skipped.push({reason:'no department for person in week',personnelNumber:pn,row:row});continue}
-      
-      if(!departmentId){continue}
+      else if(depts.length>1){report.ambiguousDepartments.push({pn:pn,departments:depts});continue}
+      else{report.skipped.push({reason:'no department',pn:pn,row:row});continue}
 
-      // 2. Break Time Calculation (Set break at the shift's midpoint)
-      var break1Start = null;
-      var breakMin = 0;
+      var break1Start = null, breakMin = 0;
       var rawBreak = row['Minutes Break'];
       if(rawBreak !== undefined && rawBreak !== null && String(rawBreak).trim() !== ''){
         var n = Number(String(rawBreak).trim());
         if(!isNaN(n) && n > 0) breakMin = Math.round(n);
       }
-      
-      if (breakMin > 0) {
+      if(breakMin > 0){
         var shiftDurationMinutes = (endDate.getTime() - startDate.getTime()) / (1000 * 60);
-
-        if (breakMin >= shiftDurationMinutes) {
-             log('Warning: Break of '+breakMin+' min is >= shift duration ('+shiftDurationMinutes+' min). Skipping break for PN '+pn, 'warn');
-             breakMin = 0;
-        } else {
-             var breakStartOffsetMinutes = Math.floor(shiftDurationMinutes / 2) - Math.floor(breakMin / 2);
-             var breakDate = new Date(startDate.getTime());
-             breakDate.setMinutes(breakDate.getMinutes() + breakStartOffsetMinutes); 
-             
-             var breakEndMs = breakDate.getTime() + (breakMin * 60 * 1000);
-             if (breakEndMs <= endDate.getTime()) {
-                 break1Start = toLocalIsoString(breakDate);
-             } else {
-                 log('Warning: Midpoint placement failed. Skipping '+breakMin+' min break for PN '+pn, 'warn');
-                 breakMin = 0; 
-             }
+        if(breakMin < shiftDurationMinutes){
+          var breakStartOffsetMinutes = Math.floor(shiftDurationMinutes / 2) - Math.floor(breakMin / 2);
+          var breakDate = new Date(startDate.getTime());
+          breakDate.setMinutes(breakDate.getMinutes() + breakStartOffsetMinutes);
+          if(breakDate.getTime() + (breakMin * 60 * 1000) <= endDate.getTime()){
+            break1Start = toLocalIsoString(breakDate);
+          }
         }
       }
 
-      // Store the name in the payload for DEBUGGING/LOGGING purposes (removed before send)
-      var debugName = row['Employee'] || 'Unknown Employee';
-
       var payload={
-        _debugName: debugName, // Temporary field
+        _debugName: row['Employee'] || 'Unknown',
         employeeId:Number(emp.employeeId||emp.id||0),
-        departmentId:String(departmentId||defaults.departmentId||''),
-        roleId:Number(roleId||defaults.roleId||0),
-        break1StartTime:break1Start, 
+        departmentId:String(departmentId||''),
+        roleId:Number(roleId||0),
+        break1StartTime:break1Start,
         break1Minutes:breakMin,
         break2StartTime:null,
         break2Minutes:0,
@@ -645,325 +850,297 @@
         shouldBePublished:false,
         startDateTime:startIso
       };
-      payloads.push(payload)
+      payloads.push(payload);
     }
     report.matched=payloads.length;
     report.unmappedRoles=Array.from(report.unmappedRoles).filter(Boolean);
-    return{payloads:payloads,report:report}
+    return{payloads:payloads,report:report};
   }
 
-  function download(name,text){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'application/json'}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
+  // --- Pause/Resume & Post ---
+  window.__isPaused = false;
+  window.__pausePromise = null;
   
-  // --- Main Execution and Handlers ---
+  async function pauseExecution(){
+    window.__isPaused = true;
+    return new Promise(function(resolve){ window.__pausePromise = resolve; });
+  }
 
-  async function main(){
+  function resumeExecution(){
+    window.__isPaused = false;
+    if(window.__pausePromise){ window.__pausePromise(); window.__pausePromise = null; }
+  }
+
+  async function postShift(endpoint, body, empName, tokenInput, sleep, onCancel){
+    const POST_MAX_RETRIES = 3;
+    let attempt = 0;
+    while(attempt < POST_MAX_RETRIES){
+      if(window.__isPaused){
+        log('Processing paused. Update token if needed, then click Resume.','warn');
+        await pauseExecution();
+      }
+      if(onCancel && onCancel()) return { cancelled: true };
+      try{
+        const token = tokenInput.value.trim();
+        var res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': token, 'Accept': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        if(res.status === 401 || res.status === 403){
+          log('✦ Token expired. Update the token above and click Resume to continue.','err');
+          var pb = document.getElementById('pauseBtn'); if(pb) pb.textContent = 'Resume';
+          await pauseExecution();
+          attempt = 0;
+          continue;
+        }
+
+        if(!res.ok){
+          var txt = await res.text();
+          throw new Error(res.status + ' - ' + txt.slice(0,100));
+        }
+        await res.text();
+        return { success: true };
+      }catch(e){
+        log('Retry '+attempt+' for '+empName+': '+e.message,'warn');
+        if(attempt < POST_MAX_RETRIES - 1) await sleep(Math.pow(2, attempt) * 1000);
+        else return { success: false };
+      }
+      attempt++;
+    }
+    return { success: false };
+  }
+
+  // --- Main Analysis ---
+  async function analyze(){
     var token=document.getElementById('token').value.trim();
     var locationId=document.getElementById('locationId').value.trim();
     var departmentIdRaw=document.getElementById('departmentId').value.trim();
     var startDate=document.getElementById('startDate').value;
     var endDate=document.getElementById('endDate').value;
-    var fileInput=document.getElementById('csvFile');
-    var file=fileInput&&fileInput.files?fileInput.files[0]:null;
-    
-    // Clear previous results
-    document.getElementById('log').textContent = ''; 
+    var file=document.getElementById('csvFile').files?document.getElementById('csvFile').files[0]:null;
+
+    document.getElementById('log').textContent = '';
     document.getElementById('statCsv').textContent = '0';
     document.getElementById('statMatched').textContent = '0';
     document.getElementById('statSkipped').textContent = '0';
     document.getElementById('statRoles').textContent = '0';
-    document.getElementById('statDept').textContent = '0';
-    document.getElementById('preview').textContent = 'No data analyzed yet.';
-    document.getElementById('report').textContent = 'No data analyzed yet.';
     window.__payloads = [];
 
-    if(!token){log('Token is required','err');return}
-    if(!locationId||!departmentIdRaw){log('Location and department are required','err');return}
-    if(!startDate||!endDate){log('Pick a start and end date','err');return}
-    if(!file){log('Choose a CSV export','err');return}
-    
-    var runBtn=document.getElementById('run');
-    runBtn.disabled=true;
-    var dlBtn=document.getElementById('downloadJson');
-    if(dlBtn) dlBtn.disabled=true;
-    var createBtn=document.getElementById('createShifts');
-    if(createBtn) createBtn.disabled=true;
+    if(!token){log('Enter your API token','err');return}
+    if(!locationId||!departmentIdRaw){log('Location and departments required','err');return}
+    if(!startDate||!endDate){log('Select start and end dates','err');return}
+    if(!file){log('Select a CSV file','err');return}
+
+    var analyzeBtn=document.getElementById('analyzeBtn');
+    var createBtn=document.getElementById('createBtn');
+    var dlBtn=document.getElementById('downloadBtn');
+    analyzeBtn.disabled = true;
 
     try{
       var depList=departmentIdRaw.split(',').map(function(s){return s.trim()}).filter(Boolean);
-      log('Fetching schedule data for '+depList.length+' department(s)...');
+      log('Analyzing: fetching '+depList.length+' department schedule(s)...','warn');
 
       var idx=await fetchAndIndexMultipleDepartments({token:token,locationId:locationId,departmentIds:depList,startDate:startDate,endDate:endDate});
-      
+
       var rows=[];
       try{
         var text=await file.text();
-        rows=parseCSV(text)
-        log('Parsed CSV with '+rows.length+' rows.','ok');
+        rows=parseCSV(text);
+        log('CSV parsed: '+rows.length+' rows','ok');
       }catch(e){
         log('CSV parse error: '+e.message,'err');
-        return
+        return;
       }
-      
-      var defaults={departmentId:'',roleId:0};
-      var out=buildDryRun(rows,idx,defaults);
 
-      // Update the stat elements
+      var out=buildDryRun(rows,idx,{},getSelectedGroups());
+
       document.getElementById('statCsv').textContent=rows.length;
       document.getElementById('statMatched').textContent=out.payloads.length;
-      document.getElementById('statSkipped').textContent=out.report.skipped.length; 
+      document.getElementById('statSkipped').textContent=out.report.skipped.length;
       document.getElementById('statRoles').textContent=out.report.unmappedRoles.length;
-      document.getElementById('statDept').textContent=out.report.ambiguousDepartments.length;
-      
-      // Update details panels
-      // We strip the debug name for preview consistency
-      var cleanPreview = out.payloads.slice(0,3).map(function(p){ 
-          var c = Object.assign({}, p); delete c._debugName; return c; 
-      });
-      document.getElementById('preview').textContent=out.payloads.length > 0 ? JSON.stringify(cleanPreview,null,2) : 'No payloads were generated.';
-      
-      document.getElementById('report').textContent=JSON.stringify({
-          skippedRows:out.report.skipped.slice(0,10).map(r => ({ reason: r.reason, employee: r.row.Employee, date: r.row.Date, role: r.row.Role })),
-          unmappedRoles:out.report.unmappedRoles,
-          ambiguousDepartments:out.report.ambiguousDepartments.slice(0,10)
-      },null,2);
-      
+
+      var cleanPreview = out.payloads.slice(0,3).map(function(p){ var c = Object.assign({}, p); delete c._debugName; return c; });
+      var previewText = out.payloads.length > 0 ? JSON.stringify(cleanPreview,null,2) : 'No payloads generated.';
+      // Preview/report panels removed — keep report data in log only
+      var reportText = JSON.stringify({
+        skippedCount: out.report.skipped.length,
+        unmappedRoles: out.report.unmappedRoles,
+        warnings: out.report.ambiguousDepartments.slice(0,5)
+      }, null, 2);
+      log('Report: '+reportText,'warn');
+
       window.__payloads=out.payloads;
-      log('Dry run ready with '+out.payloads.length+' payloads. Review results below.','ok');
-      
-      if(dlBtn) dlBtn.disabled=out.payloads.length===0;
-      if(createBtn) createBtn.disabled=out.payloads.length===0;
+      log('Ready: '+out.payloads.length+' shifts to create','ok');
+
+      dlBtn.disabled = out.payloads.length === 0;
+      createBtn.disabled = out.payloads.length === 0;
 
     }catch(e){
-      log('Fatal error during dry run: '+e.message,'err');
+      log('Error: '+e.message,'err');
     }finally{
-      runBtn.disabled=false;
+      analyzeBtn.disabled = false;
     }
   }
 
-  async function createShiftsNow(){
+  // --- Create Shifts ---
+  async function createShifts(){
     var payloads=window.__payloads||[];
-    if(!payloads.length){
-      log('No payloads to create','err');
-      return
-    }
+    if(!payloads.length){log('No payloads ready','err');return}
 
-    // Always get the latest token from the input (in case user updated it manually)
     var tokenInput = document.getElementById('token');
     var token = tokenInput.value.trim();
     var locationId=document.getElementById('locationId').value.trim();
-    
-    if(!token||!locationId){
-      log('Token and location are required','err');
-      return
-    }
 
-    log('Starting shift creation for '+payloads.length+' drafts...', 'warn');
+    if(!token||!locationId){log('Token and location required','err');return}
 
-    var createBtn=document.getElementById('createShifts');
+    var createBtn=document.getElementById('createBtn');
     createBtn.disabled=true;
-    var ok=0,fail=0;
+    var ok=0, fail=0;
     var sig=new Set;
     var sleep=function(ms){return new Promise(function(r){return setTimeout(r,ms)})};
     var start=Date.now();
     var cancel=false;
-    var progressWrap=document.getElementById('progressWrap');
-    var progressBar=document.getElementById('progressBar');
-    var progressText=document.getElementById('progressText');
-    document.getElementById('cancelBtn').disabled = false;
-    document.getElementById('cancelBtn').textContent = 'Stop';
 
-    progressWrap.style.display='block';
-    
-    document.getElementById('cancelBtn').onclick=function(){
+    var progressContainer = document.getElementById('progressContainer');
+    progressContainer.style.display='block';
+
+    var stopBtn = document.getElementById('stopBtn');
+    var pauseBtn = document.getElementById('pauseBtn');
+    stopBtn.disabled = false;
+    pauseBtn.disabled = false;
+
+    stopBtn.onclick=function(){
       cancel=true;
-      document.getElementById('cancelBtn').disabled = true;
-      document.getElementById('cancelBtn').textContent = 'Cancelling...';
+      stopBtn.disabled = true;
+      log('Stopping...','warn');
     };
-    
+
+    pauseBtn.onclick=function(){
+      if(!window.__isPaused){
+        pauseExecution();
+        pauseBtn.textContent = 'Resume';
+        log('Paused. Update token if needed and click Resume.','warn');
+      }else{
+        resumeExecution();
+        pauseBtn.textContent = 'Pause';
+        log('Resuming...','ok');
+      }
+    };
+
     function fmt(t){var m=Math.floor(t/60);var s=Math.floor(t%60);return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
-    
+
     function upd(done,total){
       var elapsed=(Date.now()-start)/1000;
       var rate=done?elapsed/done:0;
       var remain=Math.max(0,(total-done)*rate);
       var pct=total?Math.floor(done*100/total):0;
-      progressBar.style.width=pct+'%';
-      progressText.textContent = done+'/'+total+' • '+pct+'% • Elapsed '+fmt(elapsed)+' • ETA '+(rate?fmt(remain):'--:--');
+      document.getElementById('progressFill').style.width=pct+'%';
+      document.getElementById('progressText').textContent = done+'/'+total+' • '+pct+'% • '+fmt(elapsed)+' elapsed • '+fmt(remain)+' remaining';
     }
-    
+
     var total=payloads.length;
     upd(0,total);
 
     for(var i=0;i<payloads.length;i++){
-      if(cancel){
-        log('Process cancelled by user.','warn');
-        break;
-      }
-      
+      if(cancel) break;
+
       var p=payloads[i];
-      // Capture the name for logs, then remove it from the object we send
-      var empName = p._debugName || ('ID: ' + p.employeeId);
-      
+      var empName = p._debugName;
       var s=p.employeeId+'|'+p.startDateTime+'|'+p.endDateTime+'|'+p.roleId+'|'+p.departmentId;
-      
+
       if(sig.has(s)){
-        log('Skip duplicate shift for '+empName,'warn');
+        log('Duplicate: '+empName,'warn');
         upd(i+1,total);
-        continue
+        continue;
       }
       sig.add(s);
-      
-      // Create clean body (remove _debugName)
+
       var body=Object.assign({},p,{shouldBePublished:false,publishType:0});
-      delete body._debugName; 
+      delete body._debugName;
 
       var departmentId=String(p.departmentId||'');
       var endpoint='https://schedulingapi.teamhours.com/locations/'+encodeURIComponent(locationId)+'/departments/'+encodeURIComponent(departmentId)+'/shifts';
-      
+
       if(!departmentId){
-        log('Skip: missing departmentId for '+empName,'err');
+        log('Skip '+empName+': missing dept','err');
         fail++;
         upd(i+1,total);
-        continue
+        continue;
       }
-      
-      // -- RETRY LOGIC WITH AUTH PROMPT --
-      let success = false;
-      let attempt = 0;
-      const POST_MAX_RETRIES = 3;
 
-      while (attempt < POST_MAX_RETRIES && !success && !cancel) {
-          try {
-              // Ensure we use the latest token (in case it was updated in a previous loop iteration)
-              token = tokenInput.value.trim(); 
-
-              var res = await fetch(endpoint, {
-                  method: 'POST',
-                  headers: { 
-                      'Content-Type': 'application/json', 
-                      'Authorization': 'Bearer ' + token, 
-                      'Accept': 'application/json' 
-                  },
-                  body: JSON.stringify(body)
-              });
-
-              if (res.status === 401 || res.status === 403) {
-                  // PAUSE EXECUTION - PROMPT USER
-                  log('Token expired while processing ' + empName + '. Pausing...', 'err');
-                  let newToken = prompt("⚠️ API Token Expired!\n\nThe token died while processing " + empName + ".\nPaste a NEW token below to resume immediately without losing progress:");
-                  
-                  if (newToken && newToken.trim().length > 10) {
-                      tokenInput.value = newToken.trim(); // Update UI
-                      token = newToken.trim(); // Update local var
-                      log('Token updated by user. Resuming...', 'ok');
-                      // Reset attempts so we get a fresh set of tries with the new token
-                      attempt = -1; 
-                  } else {
-                      log('User cancelled token update. Process aborted.', 'err');
-                      cancel = true;
-                      break; 
-                  }
-              } else if (!res.ok) {
-                  var txt = await res.text();
-                  throw new Error(res.status + ' - ' + txt.slice(0, 150));
-              } else {
-                  // Success
-                  await res.text();
-                  log('Created shift for ' + empName + ' (' + p.startDateTime.slice(0, 10) + ')', 'ok');
-                  ok++;
-                  success = true;
-              }
-
-          } catch (e) {
-              if (cancel) break;
-              
-              log(`Attempt ${attempt + 1} failed for ${empName}: ${e.message}`, 'warn');
-              if (attempt < POST_MAX_RETRIES - 1) {
-                  await sleep(Math.pow(2, attempt) * 1000);
-              } else {
-                  // Final failure after retries
-                  log('FAILED to create shift for ' + empName, 'err');
-                  fail++;
-              }
-          }
-          attempt++;
-      }
+      var res = await postShift(endpoint, body, empName, tokenInput, sleep, function(){ return cancel; });
+      if(res && res.cancelled) break;
+      if(res && res.success){ ok++; log('Created: '+empName,'ok'); }
+      else { fail++; }
 
       upd(i+1,total);
-      
-      // Rate limit slightly
-      if (success) await sleep(200); 
+      if(res && res.success) await sleep(200);
     }
-    
-    log('Done. Success: '+ok+', Failed: '+fail,fail?'warn':'ok');
-    progressWrap.style.display='none';
-    createBtn.disabled=false;
-    document.getElementById('cancelBtn').disabled = false;
-    document.getElementById('cancelBtn').textContent = 'Stop';
-  }
-  
-  function bindHandlers(){
-    var runBtn=document.getElementById('run');
-    if(!runBtn)return;
-    runBtn.addEventListener('click',main);
-    
-    var dlBtn=document.getElementById('downloadJson');
-    if(dlBtn)dlBtn.addEventListener('click',function(){
-      var payloads=window.__payloads||[];
-      if(!payloads.length){
-        log('No payloads to download','err');
-        return
-      }
-      // Clean debug name before download
-      var clean = payloads.map(function(p){ 
-          var c = Object.assign({}, p); delete c._debugName; return c; 
-      });
-      download('fourth_shift_payloads_dry_run.json',JSON.stringify(clean,null,2))
-    });
-    
-    var createBtn=document.getElementById('createShifts');
-    if(createBtn)createBtn.addEventListener('click',createShiftsNow);
-    
-    var fileInput = document.getElementById('csvFile');
-    var fileNameDisplay = document.getElementById('fileNameDisplay');
-    fileInput.addEventListener('change', function() {
-        if (this.files.length > 0) {
-            fileNameDisplay.textContent = this.files[0].name;
-            fileNameDisplay.classList.remove('text-gray-400');
-            fileNameDisplay.classList.add('text-gray-800');
-        } else {
-            fileNameDisplay.textContent = 'No file selected';
-            fileNameDisplay.classList.add('text-gray-400');
-            fileNameDisplay.classList.remove('text-gray-800');
-        }
-    });
-  }
-  
-  window.addEventListener('error',function(e){try{log('JS error: '+e.message,'err')}catch(_){}console.error(e)});
-  window.addEventListener('unhandledrejection',function(e){try{var msg=e.reason&&e.reason.message||e.reason;log('Promise rejection: '+msg,'err')}catch(_){}console.error(e)});
-  
-  document.addEventListener('DOMContentLoaded',function(){
-    try{
-      var today=new Date();
-      var day=today.getDay();
-      var diffToMon=day===0?1:8-day; 
-      var nextMonday=new Date(today);
-      nextMonday.setDate(today.getDate()+diffToMon);
-      nextMonday.setHours(0,0,0,0); 
-      var nextSunday=new Date(nextMonday);
-      nextSunday.setDate(nextMonday.getDate()+6);
 
-      var fmt=function(d){return d.toISOString().slice(0,10)};
-      var start=document.getElementById('startDate');
-      var end=document.getElementById('endDate');
+    log('Complete: '+ok+' created, '+fail+' failed',fail?'warn':'ok');
+    progressContainer.style.display='none';
+    createBtn.disabled=false;
+    pauseBtn.textContent = 'Pause';
+  }
+
+  // --- Handlers ---
+  document.getElementById('analyzeBtn').addEventListener('click', analyze);
+  document.getElementById('createBtn').addEventListener('click', createShifts);
+  document.getElementById('downloadBtn').addEventListener('click', function(){
+    var payloads=window.__payloads||[];
+    if(!payloads.length){log('No payloads to download','err');return}
+    var clean = payloads.map(function(p){ var c = Object.assign({}, p); delete c._debugName; return c; });
+    download('fourth_shifts_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(clean,null,2));
+  });
+
+  var fileInput = document.getElementById('csvFile');
+  var fileNameDisplay = document.getElementById('fileNameDisplay');
+  fileInput.addEventListener('change', function(){
+    if(this.files.length > 0){
+      fileNameDisplay.textContent = this.files[0].name;
+      fileNameDisplay.classList.add('selected');
       
-      if(start&&!start.value)start.value=fmt(nextMonday);
-      if(end&&!end.value)end.value=fmt(nextSunday)
-    }catch(e){}
-    
-    document.getElementById('preview').textContent = 'No data analyzed yet.';
-    document.getElementById('report').textContent = 'No data analyzed yet.';
-    bindHandlers()
+      // Extract groups from CSV and show filter options
+      var file = this.files[0];
+      var reader = new FileReader();
+      reader.onload = function(e){
+        try{
+          var text = e.target.result;
+          var rows = parseCSV(text);
+          var groups = extractGroupsFromCSV(rows);
+          if(groups.length > 0){
+            renderGroupFilters(groups);
+            document.getElementById('groupFilterContainer').style.display = 'block';
+          }
+        }catch(err){
+          // Silent fail, just don't show filters
+        }
+      };
+      reader.readAsText(file);
+    }else{
+      fileNameDisplay.textContent = 'No file selected';
+      fileNameDisplay.classList.remove('selected');
+      document.getElementById('groupFilterContainer').style.display = 'none';
+    }
+  });
+
+  // Initialize default dates
+  document.addEventListener('DOMContentLoaded', function(){
+    var today=new Date();
+    var day=today.getDay();
+    var diffToMon=day===0?1:8-day;
+    var nextMonday=new Date(today);
+    nextMonday.setDate(today.getDate()+diffToMon);
+    nextMonday.setHours(0,0,0,0);
+    var nextSunday=new Date(nextMonday);
+    nextSunday.setDate(nextMonday.getDate()+6);
+    var fmt=function(d){return d.toISOString().slice(0,10)};
+    var start=document.getElementById('startDate');
+    var end=document.getElementById('endDate');
+    if(start&&!start.value)start.value=fmt(nextMonday);
+    if(end&&!end.value)end.value=fmt(nextSunday);
   });
 })();
 </script>
